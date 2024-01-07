@@ -6,17 +6,19 @@
 
 # extended color palette when available
 if [[ $TERM = *256color ]]; then
+  color_blue="$FG[057]"
+  color_cyan="%F{81}"
   color_green="$FG[082]"
   color_orange="$FG[202]"
   color_purple="$FG[135]"
   color_red="$FG[009]"
-  color_cyan="%F{81}"
 else
+  color_blue="%F{blue}"
+  color_cyan="%F{cyan}"
   color_green="%F{green}"
   color_orange="%F{yellow}"
   color_purple="%F{magenta}"
   color_red="%F{red}"
-  color_cyan="%F{cyan}"
 fi
 
 pwd_config="${color_green}%~%{$reset_color%}"
@@ -33,7 +35,7 @@ add-zsh-hook precmd vcs_info
 zstyle ':vcs_info:*' check-for-changes true
 
 FMT_BRANCH=" ${sep_config} ${color_cyan}%b%u%c%{$reset_color%}"
-FMT_ACTION="${sep_config}${color_green}%a%{$reset_color%}"
+FMT_ACTION=" ${sep_config} ${color_blue}%a%{$reset_color%}"
 FMT_UNSTAGED="${color_orange} ●"
 FMT_STAGED="${color_green} ●"
 
