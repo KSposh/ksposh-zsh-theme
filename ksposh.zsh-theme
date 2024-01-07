@@ -11,12 +11,12 @@
 
 # extended color palette when available
 if [[ $TERM = *256color ]]; then
-  color_blue="$FG[057]"
-  color_cyan="%F{81}"
-  color_green="$FG[082]"
-  color_orange="$FG[202]"
-  color_purple="$FG[135]"
-  color_red="$FG[009]"
+  color_blue="%F{057}"
+  color_cyan="%F{081}"
+  color_green="%F{082}"
+  color_orange="%F{202}"
+  color_purple="%F{135}"
+  color_red="%F{009}"
 else
   color_blue="%F{blue}"
   color_cyan="%F{cyan}"
