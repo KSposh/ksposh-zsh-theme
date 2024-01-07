@@ -1,8 +1,13 @@
 # prompt style and colors based of Steve Losh's Prose theme:
 # https://github.com/sjl/oh-my-zsh/blob/master/themes/prose.zsh-theme
-
-# color configurations
+#
+# git status configurations based of Sal Ferrarello's guide:
+# https://salferrarello.com/zsh-git-status-prompt/
+#
+# color configurations from:
 # https://www.ditig.com/publications/256-colors-cheat-sheet
+#
+# author: José Dias <ksposh>
 
 # extended color palette when available
 if [[ $TERM = *256color ]]; then
