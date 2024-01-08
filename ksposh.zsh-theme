@@ -26,10 +26,11 @@ else
   color_red="%F{red}"
 fi
 
+usr_config="${color_purple}%n%{$reset_color%}"
 pwd_config="${color_green}%~%{$reset_color%}"
 sep_config="${color_orange} » %{$reset_color%}"
+dot_config="${color_orange} 🞄 %{$reset_color%}"
 split_config="${color_orange} § %{$reset_color%}"
-usr_config="${color_purple}%n%{$reset_color%}"
 
 # git configurations 
 
@@ -39,15 +40,15 @@ add-zsh-hook precmd vcs_info
 
 zstyle ':vcs_info:*' check-for-changes true
 
-FMT_BRANCH="${sep_config}${color_cyan}%b%u%c%{$reset_color%}"
-FMT_ACTION="${sep_config}${color_blue}%a%{$reset_color%}"
-FMT_UNSTAGED="${color_orange} ●"
-FMT_STAGED="${color_green} ●"
+FMT_BRANCH="${sep_config}${color_cyan}%b%{$reset_color%}"
+FMT_ACTION="${dot_config}${color_blue}%a%{$reset_color%}"
+FMT_UNSTAGED=" ${color_red}▼%{$reset_color%}"
+FMT_STAGED="${color_green}▲%{$reset_color%}"
 
 zstyle ':vcs_info:*' unstagedstr "${FMT_UNSTAGED}"
 zstyle ':vcs_info:*' stagedstr "${FMT_STAGED}"
-zstyle ':vcs_info:git:*' actionformats "${FMT_BRANCH}${FMT_ACTION}"
-zstyle ':vcs_info:git:*' formats "${FMT_BRANCH}"
+zstyle ':vcs_info:git:*' actionformats "${FMT_BRANCH}${FMT_ACTION}%u%c"
+zstyle ':vcs_info:git:*' formats "${FMT_BRANCH}%u%c"
 zstyle ':vcs_info:*' nvcsformats ""
 
 # virtualenv configurations
@@ -55,5 +56,5 @@ zstyle ':vcs_info:*' nvcsformats ""
 ZSH_THEME_VIRTUALENV_PREFIX="${sep_config}${color_red}"
 ZSH_THEME_VIRTUALENV_SUFFIX="%{$reset_color%}"
 
-PROMPT="${usr_config}${sep_config}${pwd_config}\$(virtualenv_prompt_info)\${vcs_info_msg_0_}${split_config}"
+PROMPT="${usr_config}${sep_config}${pwd_config}\$(virtualenv_prompt_info)\${vcs_info_msg_0_}${split_config}%{$reset_color%}"
 
