@@ -74,7 +74,7 @@ FMT_UNTRACKED=" ${color_red}🞉%{$reset_color%}"
 zstyle ':vcs_info:git*+set-message:*' hooks git-count-items
 zstyle ':vcs_info:*' stagedstr "${FMT_STAGED}"
 zstyle ':vcs_info:*' unstagedstr "${FMT_UNSTAGED}"
-zstyle ':vcs_info:git:*' actionformats "${FMT_BRANCH}${FMT_ACTION}%m%u%c"
+zstyle ':vcs_info:git:*' actionformats "${FMT_BRANCH}${FMT_ACTION}%u%c" #TODO parse misc message here 
 zstyle ':vcs_info:git:*' formats "${FMT_BRANCH}%m%u%c"
 zstyle ':vcs_info:*' nvcsformats ""
 
