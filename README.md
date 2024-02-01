@@ -12,7 +12,7 @@ Supports displayes for the following:
 - git stage/unstage/untracked numbers and icons
 
 ![](images/ksp_zsh_theme.png)
-![](images/ksp_zsh_theme_actions.png)
+![](images/ksp_zsh_theme_action.png)
 
 ## Installation
 
