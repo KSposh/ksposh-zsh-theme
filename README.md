@@ -11,8 +11,8 @@ Supports displayes for the following:
 - git actions 
 - git stage/unstage/untracked numbers and icons
 
-![](images/ksp_zsh_theme.png)
-![](images/ksp_zsh_theme_action.png)
+![](images/ksp_zsh_theme_venv.png)
+![](images/ksp_zsh_theme_venv_action.png)
 
 ## Installation
 
