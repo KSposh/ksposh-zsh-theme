@@ -36,7 +36,7 @@ fi
 usr_config="${color_purple}%n%{$reset_color%}"
 pwd_config="${color_green}%~%{$reset_color%}"
 sep_config="${color_orange}»%{$reset_color%}"
-dot_config="${color_orange}🞄%{$reset_color%}"
+tilda_config="${color_orange}~%{$reset_color%}"
 split_config="${color_orange}§%{$reset_color%}"
 
 # git configurations 
@@ -48,7 +48,7 @@ add-zsh-hook precmd vcs_info
 zstyle ':vcs_info:*' check-for-changes true
 
 FMT_BRANCH=" ${sep_config} ${color_cyan}%b%{$reset_color%}"
-FMT_ACTION="${dot_config}${color_blue}%a%{$reset_color%}"
+FMT_ACTION="${tilda_config}${color_blue}%a%{$reset_color%}"
 FMT_UNSTAGED=" ${color_orange}▼%{$reset_color%}"
 FMT_STAGED=" ${color_green}▲%{$reset_color%}"
 FMT_UNTRACKED=" ${color_red}🞍%{$reset_color%}"
@@ -75,12 +75,12 @@ FMT_UNTRACKED=" ${color_red}🞍%{$reset_color%}"
 }
 
 zstyle ':vcs_info:git*+set-message:*' hooks set-git-items set-untracked
-zstyle ':vcs_info:*' stagedstr "${FMT_STAGED}"
-zstyle ':vcs_info:*' unstagedstr "${FMT_UNSTAGED}"
-#zstyle ':vcs_info:*' untrackedstr "${FMT_UNTRACKED}"
+zstyle ':vcs_info:*'     stagedstr     "${FMT_STAGED}"
+zstyle ':vcs_info:*'     unstagedstr   "${FMT_UNSTAGED}"
+#zstyle ':vcs_info:*'     untrackedstr  "${FMT_UNTRACKED}"
 zstyle ':vcs_info:git:*' actionformats "${FMT_BRANCH}${FMT_ACTION}%u%c" 
-zstyle ':vcs_info:git:*' formats "${FMT_BRANCH}%m%u%c"
-zstyle ':vcs_info:*' nvcsformats ""
+zstyle ':vcs_info:git:*' formats       "${FMT_BRANCH}%m%u%c"
+zstyle ':vcs_info:*'     nvcsformats   ""
 
 # virtualenv configurations
 
