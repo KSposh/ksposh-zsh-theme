@@ -36,7 +36,8 @@ fi
 usr_config="${color_purple}%n%{$reset_color%}"
 pwd_config="${color_green}%~%{$reset_color%}"
 sep_config="${color_orange}»%{$reset_color%}"
-tilda_config="${color_orange}~%{$reset_color%}"
+la_config="${color_orange}<%{$reset_color%}"
+ra_config="${color_orange}>%{$reset_color%}"
 split_config="${color_orange}§%{$reset_color%}"
 
 # git configurations 
@@ -48,20 +49,20 @@ add-zsh-hook precmd vcs_info
 zstyle ':vcs_info:*' check-for-changes true
 
 FMT_BRANCH=" ${sep_config} ${color_cyan}%b%{$reset_color%}"
-FMT_ACTION="${tilda_config}${color_blue}%a%{$reset_color%}"
+FMT_ACTION=" ${ra_config}${color_blue}%a${la_config}%{$reset_color%}"
 FMT_UNSTAGED=" ${color_orange}▼%{$reset_color%}"
 FMT_STAGED=" ${color_green}▲%{$reset_color%}"
-FMT_UNTRACKED=" ${color_red}🞍%{$reset_color%}"
+FMT_UNTRACKED=" ${color_red}?%{$reset_color%}"
 
 +vi-set-git-items(){ 
     if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] ; then
         staged_count="$(git diff --staged --numstat | wc -l)"
         unstaged_count="$(git diff --numstat | wc -l)"
         if [[ "$staged_count" -gt "0" ]] ; then
-            hook_com[staged]+="${color_green}$staged_count%{$reset_color%}"
+            hook_com[staged]+=" ${color_green}$staged_count%{$reset_color%}"
         fi
         if [[ "$unstaged_count" -gt "0" ]] ; then
-            hook_com[unstaged]+="${color_orange}$unstaged_count%{$reset_color%}"
+            hook_com[unstaged]+=" ${color_orange}$unstaged_count%{$reset_color%}"
         fi
     fi
 }
@@ -92,8 +93,8 @@ ZSH_THEME_VIRTUALENV_SUFFIX="%{$reset_color%}"
 # be aware of spacing
 
 PROMPT=""
-PROMPT+="${usr_config}"
-PROMPT+=" ${sep_config} " 
+#PROMPT+="${usr_config}"
+#PROMPT+=" ${sep_config} " 
 PROMPT+="${pwd_config}"
 PROMPT+="\$(virtualenv_prompt_info)"
 PROMPT+="\${vcs_info_msg_0_}"
