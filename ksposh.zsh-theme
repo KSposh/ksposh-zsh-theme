@@ -28,14 +28,13 @@
 		count_unstaged="$(git diff-files --name-only | wc -l)"
 		count_untracked="$(git ls-files --other --exclude-standard | wc -l)"
 
-		if [ "$count_staged" -gt 0 ]; then
-			hook_com[staged]+="$count_staged"
-		fi
-		if [ "$count_unstaged" -gt 0 ]; then
-			hook_com[unstaged]+="$count_unstaged"
-		fi
-        if [ "$count_untracked" -gt 0 ]; then
+		[ "$count_staged" -gt 0 ] && hook_com[staged]+="$count_staged"
+		[ "$count_unstaged" -gt 0 ] && hook_com[unstaged]+="$count_unstaged"
+
+		if [ "$count_untracked" -gt 0 ]; then
 			hook_com[misc]=" ${color_red}?$count_untracked"
+		else
+			hook_com[misc]=""
 		fi
 	fi
 }
