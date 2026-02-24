@@ -31,17 +31,21 @@
 		[ "$count_staged" -gt 0 ] && hook_com[staged]+="$count_staged"
 		[ "$count_unstaged" -gt 0 ] && hook_com[unstaged]+="$count_unstaged"
 
-		if [ "$count_untracked" -gt 0 ]; then
-			hook_com[misc]=" ${color_red}?$count_untracked"
-		else
-			hook_com[misc]=""
-		fi
+		hook_com[misc]="" # Empty misc to not get artifacts in git action
+		[ "$count_untracked" -gt 0 ] && hook_com[misc]=" ${color_red}?$count_untracked"
 	fi
 }
 
-__zsh_virtualenv_prompt_info() {
-  [ -n "$VIRTUAL_ENV" ] || return
-  echo "${ZSH_THEME_VIRTUALENV_PREFIX=[}${VIRTUAL_ENV_PROMPT:-${VIRTUAL_ENV:t:gs/%/%%}}${ZSH_THEME_VIRTUALENV_SUFFIX=]}"
+__zsh_virtualenv_prompt() {
+	[ -z "$VIRTUAL_ENV" ] && return
+
+	if [ -n "$VIRTUAL_ENV_PROMPT" ]; then
+		env_name=$VIRTUAL_ENV_PROMPT
+	elif [ -n "$VIRTUAL_ENV" ]; then
+		env_name=$(basename "$VIRTUAL_ENV" | sed 's/%/%%/g')
+	fi
+
+	echo "${ZSH_THEME_VIRTUALENV_PREFIX:-[}$env_name${ZSH_THEME_VIRTUALENV_SUFFIX:-]}"
 }
 
 ## ---
@@ -109,7 +113,7 @@ VIRTUAL_ENV_DISABLE_PROMPT=1
 ## ---
 
 PROMPT=""
-PROMPT+="\$(__zsh_virtualenv_prompt_info)"
+PROMPT+="\$(__zsh_virtualenv_prompt)"
 PROMPT+=" ${marker_user}"
 PROMPT+=" ${marker_separator}"
 PROMPT+=" ${marker_path}"
