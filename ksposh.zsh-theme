@@ -35,7 +35,7 @@
 			hook_com[unstaged]+="$count_unstaged"
 		fi
         if [ "$count_untracked" -gt 0 ]; then
-            hook_com[misc]=" ${color_red}?"
+            hook_com[misc]=" ${color_red}$count_untracked?"
 
 		fi
 	fi
