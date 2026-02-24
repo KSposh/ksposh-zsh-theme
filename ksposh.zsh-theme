@@ -11,6 +11,7 @@
 #
 # virtualenv configurations from:
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/virtualenv/virtualenv.plugin.zsh
+
 # color codes from:
 # https://www.ditig.com/publications/256-colors-cheat-sheet
 #
@@ -28,13 +29,14 @@
 		count_untracked="$(git ls-files --other --exclude-standard | wc -l)" 
 
 		if [ "$count_staged" -gt 0 ]; then
-			hook_com[staged]+="${color_green}$count_staged%{$reset_color%}"
+			hook_com[staged]+="$count_staged"
 		fi
 		if [ "$count_unstaged" -gt 0 ]; then
-			hook_com[unstaged]+="${color_orange}$count_unstaged%{$reset_color%}"
+			hook_com[unstaged]+="$count_unstaged"
 		fi
         if [ "$count_untracked" -gt 0 ]; then
-            hook_com[misc]="${FMT_UNTRACKED}"
+            hook_com[misc]=" ${color_red}?"
+
 		fi
 	fi
 }
@@ -43,7 +45,6 @@ __zsh_virtualenv_prompt_info() {
   [ -n "$VIRTUAL_ENV" ] || return
   echo "${ZSH_THEME_VIRTUALENV_PREFIX=[}${VIRTUAL_ENV_PROMPT:-${VIRTUAL_ENV:t:gs/%/%%}}${ZSH_THEME_VIRTUALENV_SUFFIX=]}"
 }
-
 
 ## ---
 ## Color Scheme
@@ -72,12 +73,12 @@ esac
 ## Markers
 ## ---
 
-indicator_user="${color_purple}%n%{$reset_color%}"
-indicator_path="${color_green}%~%{$reset_color%}"
-indicator_separator="${color_orange}»%{$reset_color%}"
-indicator_less="${color_orange}<%{$reset_color%}"
-indicator_right="${color_orange}>%{$reset_color%}"
-indicator_split="${color_orange}§%{$reset_color%}"
+marker_user="${color_purple}%n"
+marker_path="${color_green}%~"
+marker_separator="${color_orange}»"
+marker_less="${color_orange}<"
+marker_right="${color_orange}>"
+marker_split="${color_orange}§"
 
 ## ---
 ## Version Control (Git) Configurations
@@ -87,38 +88,33 @@ autoload -Uz vcs_info add-zsh-hook
 setopt prompt_subst
 add-zsh-hook precmd vcs_info
 
-zstyle ':vcs_info:*' check-for-changes true
-
-FMT_BRANCH=" ${indicator_separator} ${color_cyan}%b%{$reset_color%}"
-FMT_ACTION=" ${indicator_right}${color_blue}%a${indicator_less}%{$reset_color%}"
-FMT_UNSTAGED=" ${color_orange}▼%{$reset_color%}"
-FMT_STAGED=" ${color_green}▲%{$reset_color%}"
-FMT_UNTRACKED=" ${color_red}?%{$reset_color%}"
-
-
 zstyle ':vcs_info:git*+set-message:*' hooks acquire-git-change-info 
-zstyle ':vcs_info:*'     stagedstr     "${FMT_STAGED}"
-zstyle ':vcs_info:*'     unstagedstr   "${FMT_UNSTAGED}"
-#zstyle ':vcs_info:*'     untrackedstr  "${FMT_UNTRACKED}"
-zstyle ':vcs_info:git:*' actionformats "${FMT_BRANCH}${FMT_ACTION}%u%c" 
-zstyle ':vcs_info:git:*' formats       "${FMT_BRANCH}%m%u%c"
+zstyle ':vcs_info:git:*' formats       "${marker_separator} ${color_cyan}%b%m%u%c"
+zstyle ':vcs_info:git:*' actionformats "${marker_separator} ${color_cyan}%b ${marker_right}${color_blue}%a${marker_less}%m%u%c" 
+zstyle ':vcs_info:*'     stagedstr     " ${color_green}▲"
+zstyle ':vcs_info:*'     unstagedstr   " ${color_orange}▼"
 zstyle ':vcs_info:*'     nvcsformats   ""
+zstyle ':vcs_info:*'	 check-for-changes true
 
-# virtualenv configurations
+## ---
+## Python Virtual Env Variables
+## ---
 
 ZSH_THEME_VIRTUALENV_PREFIX="${color_red}"
-ZSH_THEME_VIRTUALENV_SUFFIX=" ${indicator_separator}%{$reset_color%}"
+ZSH_THEME_VIRTUALENV_SUFFIX=" ${marker_separator}"
 
-# PROMPT 
-# comment out what you don't want included
-# be aware of spacing
+## ---
+## PROMPT
+## Comment out what needs to be disabled
+## Don't include spacing for function edits
+## ---
 
 PROMPT=""
-PROMPT+="\$(__zsh_virtualenv_prompt_info) "
-PROMPT+="${indicator_user}"
-PROMPT+=" ${indicator_separator} " 
-PROMPT+="${indicator_path}"
+PROMPT+="\$(__zsh_virtualenv_prompt_info)" # TODO Still not working as expected
+PROMPT+=" ${marker_user}"
+PROMPT+=" ${marker_separator}" 
+PROMPT+=" ${marker_path}"
 PROMPT+="\${vcs_info_msg_0_}"
-PROMPT+=" ${indicator_split} "
-PROMPT+="%{$reset_color%}"
+PROMPT+=" ${marker_split}"
+PROMPT+=" %{$reset_color%}"
 
