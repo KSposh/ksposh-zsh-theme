@@ -1,20 +1,20 @@
 #!/bin/sh
 # prompt style and colors based of Steve Losh's Prose theme:
 # https://github.com/sjl/oh-my-zsh/blob/master/themes/prose.zsh-theme
-#
+
 # git status configurations based of Sal Ferrarello's guide:
 # https://salferrarello.com/zsh-git-status-prompt/
-#
+
 # git untracted configuration from:
 # https://github.com/zsh-users/zsh/blob/f9e9dce5443f323b340303596406f9d3ce11d23a/Misc/vcs_info-examples#L155-L170
 # https://github.com/zsh-users/zsh/blob/f9e9dce5443f323b340303596406f9d3ce11d23a/Functions/VCS_Info/VCS_INFO_formats#L37-L50
-#
+
 # virtualenv configurations from:
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/virtualenv/virtualenv.plugin.zsh
 
 # color codes from:
 # https://www.ditig.com/publications/256-colors-cheat-sheet
-#
+
 # author: José Dias <ksposh>
 
 ## ---
@@ -26,17 +26,15 @@
 
 		count_staged="$(git diff-index --cached --name-only HEAD | wc -l)"
 		count_unstaged="$(git diff-files --name-only | wc -l)"
-		count_untracked="$(git ls-files --other --exclude-standard | wc -l)" 
+		count_untracked="$(git ls-files --other --exclude-standard | wc -l)"
 
-		if [ "$count_staged" -gt 0 ]; then
-			hook_com[staged]+="$count_staged"
-		fi
-		if [ "$count_unstaged" -gt 0 ]; then
-			hook_com[unstaged]+="$count_unstaged"
-		fi
-        if [ "$count_untracked" -gt 0 ]; then
-            hook_com[misc]=" ${color_red}$count_untracked?"
+		[ "$count_staged" -gt 0 ] && hook_com[staged]+="$count_staged"
+		[ "$count_unstaged" -gt 0 ] && hook_com[unstaged]+="$count_unstaged"
 
+		if [ "$count_untracked" -gt 0 ]; then
+			hook_com[misc]=" ${color_red}?$count_untracked"
+		else
+			hook_com[misc]=""
 		fi
 	fi
 }
@@ -59,7 +57,7 @@ case "$TERM" in
 		color_purple="%F{135}"
 		color_red="%F{009}"
 		;;
-	*)		
+	*)
 		color_blue="%F{blue}"
 		color_cyan="%F{cyan}"
 		color_green="%F{green}"
@@ -77,7 +75,7 @@ marker_user="${color_purple}%n"
 marker_path="${color_green}%~"
 marker_separator="${color_orange}»"
 marker_less="${color_orange}<"
-marker_right="${color_orange}>"
+marker_more="${color_orange}>"
 marker_split="${color_orange}§"
 
 ## ---
@@ -88,9 +86,9 @@ autoload -Uz vcs_info add-zsh-hook
 setopt prompt_subst
 add-zsh-hook precmd vcs_info
 
-zstyle ':vcs_info:git*+set-message:*' hooks acquire-git-change-info 
+zstyle ':vcs_info:git*+set-message:*' hooks acquire-git-change-info
 zstyle ':vcs_info:git:*' formats       " ${marker_separator} ${color_cyan}%b%m%u%c"
-zstyle ':vcs_info:git:*' actionformats " ${marker_separator} ${color_cyan}%b ${marker_right}${color_blue}%a${marker_less}%m%u%c" 
+zstyle ':vcs_info:git:*' actionformats " ${marker_separator} ${color_cyan}%b%m%u%c ${marker_more}${color_blue}%a${marker_less}"
 zstyle ':vcs_info:*'     stagedstr     " ${color_green}▲"
 zstyle ':vcs_info:*'     unstagedstr   " ${color_orange}▼"
 zstyle ':vcs_info:*'     nvcsformats   ""
@@ -113,7 +111,7 @@ VIRTUAL_ENV_DISABLE_PROMPT=1
 PROMPT=""
 PROMPT+="\$(__zsh_virtualenv_prompt_info)"
 PROMPT+=" ${marker_user}"
-PROMPT+=" ${marker_separator}" 
+PROMPT+=" ${marker_separator}"
 PROMPT+=" ${marker_path}"
 PROMPT+="\${vcs_info_msg_0_}"
 PROMPT+=" ${marker_split}"
