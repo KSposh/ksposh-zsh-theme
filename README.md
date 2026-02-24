@@ -6,7 +6,7 @@ Links for feature inspirations are present in the script's header.
 
 Supports the following prompt displays:
 
-- Active Python virtual environment (_currently not working as intended_)
+- Active Python virtual environment
 - Git active branch and action information
 - Git staged/unstaged change number and indicators
 - Git untracked file indicator

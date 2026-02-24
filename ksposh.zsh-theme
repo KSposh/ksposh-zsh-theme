@@ -100,8 +100,9 @@ zstyle ':vcs_info:*'	 check-for-changes true
 ## Python Virtual Env Variables
 ## ---
 
-ZSH_THEME_VIRTUALENV_PREFIX="${color_red}"
+ZSH_THEME_VIRTUALENV_PREFIX=" ${color_red}"
 ZSH_THEME_VIRTUALENV_SUFFIX=" ${marker_separator}"
+VIRTUAL_ENV_DISABLE_PROMPT=1
 
 ## ---
 ## PROMPT
@@ -110,7 +111,7 @@ ZSH_THEME_VIRTUALENV_SUFFIX=" ${marker_separator}"
 ## ---
 
 PROMPT=""
-PROMPT+="\$(__zsh_virtualenv_prompt_info)" # TODO Still not working as expected
+PROMPT+="\$(__zsh_virtualenv_prompt_info)"
 PROMPT+=" ${marker_user}"
 PROMPT+=" ${marker_separator}" 
 PROMPT+=" ${marker_path}"
