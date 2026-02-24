@@ -9,6 +9,8 @@
 # https://github.com/zsh-users/zsh/blob/f9e9dce5443f323b340303596406f9d3ce11d23a/Misc/vcs_info-examples#L155-L170
 # https://github.com/zsh-users/zsh/blob/f9e9dce5443f323b340303596406f9d3ce11d23a/Functions/VCS_Info/VCS_INFO_formats#L37-L50
 #
+# virtualenv configurations from:
+# https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/virtualenv/virtualenv.plugin.zsh
 # color codes from:
 # https://www.ditig.com/publications/256-colors-cheat-sheet
 #
@@ -36,6 +38,12 @@
 		fi
 	fi
 }
+
+__zsh_virtualenv_prompt_info() {
+  [ -n "$VIRTUAL_ENV" ] || return
+  echo "${ZSH_THEME_VIRTUALENV_PREFIX=[}${VIRTUAL_ENV_PROMPT:-${VIRTUAL_ENV:t:gs/%/%%}}${ZSH_THEME_VIRTUALENV_SUFFIX=]}"
+}
+
 
 ## ---
 ## Color Scheme
@@ -71,7 +79,9 @@ indicator_less="${color_orange}<%{$reset_color%}"
 indicator_right="${color_orange}>%{$reset_color%}"
 indicator_split="${color_orange}§%{$reset_color%}"
 
-# git configurations 
+## ---
+## Version Control (Git) Configurations
+## ---
 
 autoload -Uz vcs_info add-zsh-hook
 setopt prompt_subst
@@ -96,18 +106,18 @@ zstyle ':vcs_info:*'     nvcsformats   ""
 
 # virtualenv configurations
 
-ZSH_THEME_VIRTUALENV_PREFIX=" ${indicator_separator} ${color_red}"
-ZSH_THEME_VIRTUALENV_SUFFIX="%{$reset_color%}"
+ZSH_THEME_VIRTUALENV_PREFIX="${color_red}"
+ZSH_THEME_VIRTUALENV_SUFFIX=" ${indicator_separator}%{$reset_color%}"
 
 # PROMPT 
 # comment out what you don't want included
 # be aware of spacing
 
 PROMPT=""
+PROMPT+="\$(__zsh_virtualenv_prompt_info) "
 PROMPT+="${indicator_user}"
 PROMPT+=" ${indicator_separator} " 
 PROMPT+="${indicator_path}"
-PROMPT+="\$(virtualenv_prompt_info)"
 PROMPT+="\${vcs_info_msg_0_}"
 PROMPT+=" ${indicator_split} "
 PROMPT+="%{$reset_color%}"
