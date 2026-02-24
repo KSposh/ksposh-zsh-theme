@@ -89,8 +89,8 @@ setopt prompt_subst
 add-zsh-hook precmd vcs_info
 
 zstyle ':vcs_info:git*+set-message:*' hooks acquire-git-change-info 
-zstyle ':vcs_info:git:*' formats       "${marker_separator} ${color_cyan}%b%m%u%c"
-zstyle ':vcs_info:git:*' actionformats "${marker_separator} ${color_cyan}%b ${marker_right}${color_blue}%a${marker_less}%m%u%c" 
+zstyle ':vcs_info:git:*' formats       " ${marker_separator} ${color_cyan}%b%m%u%c"
+zstyle ':vcs_info:git:*' actionformats " ${marker_separator} ${color_cyan}%b ${marker_right}${color_blue}%a${marker_less}%m%u%c" 
 zstyle ':vcs_info:*'     stagedstr     " ${color_green}▲"
 zstyle ':vcs_info:*'     unstagedstr   " ${color_orange}▼"
 zstyle ':vcs_info:*'     nvcsformats   ""
