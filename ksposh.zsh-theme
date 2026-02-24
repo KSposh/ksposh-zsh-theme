@@ -1,3 +1,4 @@
+#!/bin/sh
 # prompt style and colors based of Steve Losh's Prose theme:
 # https://github.com/sjl/oh-my-zsh/blob/master/themes/prose.zsh-theme
 #
@@ -13,25 +14,58 @@
 #
 # author: José Dias <ksposh>
 
-# color configuration
+## ---
+## Functions
+## ---
 
-if [[ $TERM = *256color ]]; then
-  color_blue="%F{063}"
-  color_cyan="%F{081}"
-  color_green="%F{082}"
-  color_orange="%F{202}"
-  color_purple="%F{135}"
-  color_red="%F{009}"
-else
-  color_blue="%F{blue}"
-  color_cyan="%F{cyan}"
-  color_green="%F{green}"
-  color_orange="%F{yellow}"
-  color_purple="%F{magenta}"
-  color_red="%F{red}"
-fi
++vi-acquire-git-change-info() {
+	if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+		count_staged="$(git diff-index --cached --name-only HEAD | wc -l)"
+		count_unstaged="$(git diff-files --name-only | wc -l)"
 
-# markers
+		if [ "$count_staged" -gt 0 ]; then
+			hook_com[staged]+="${color_green}$count_staged%{$reset_color%}"
+		fi
+		if [ "$count_unstaged" -gt 0 ]; then
+			hook_com[unstaged]+="${color_orange}$count_unstaged%{$reset_color%}"
+		fi
+
+	fi
+}
+
++vi-acquire-untracked-files(){
+    if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] ; then 
+        if [[ $(git ls-files --other --exclude-standard | wc -l) -gt "0" ]] ; then
+            hook_com[misc]="${FMT_UNTRACKED}"
+        fi
+    fi
+}
+## ---
+## Color Scheme
+## ---
+
+case "$TERM" in
+	*256color)
+		color_blue="%F{063}"
+		color_cyan="%F{081}"
+		color_green="%F{082}"
+		color_orange="%F{202}"
+		color_purple="%F{135}"
+		color_red="%F{009}"
+		;;
+	*)		
+		color_blue="%F{blue}"
+		color_cyan="%F{cyan}"
+		color_green="%F{green}"
+		color_orange="%F{yellow}"
+		color_purple="%F{magenta}"
+		color_red="%F{red}"
+		;;
+esac
+
+## ---
+## Markers
+## ---
 
 usr_config="${color_purple}%n%{$reset_color%}"
 pwd_config="${color_green}%~%{$reset_color%}"
@@ -54,28 +88,8 @@ FMT_UNSTAGED=" ${color_orange}▼%{$reset_color%}"
 FMT_STAGED=" ${color_green}▲%{$reset_color%}"
 FMT_UNTRACKED=" ${color_red}?%{$reset_color%}"
 
-+vi-set-git-items(){ 
-    if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] ; then
-        staged_count="$(git diff --staged --numstat | wc -l)"
-        unstaged_count="$(git diff --numstat | wc -l)"
-        if [[ "$staged_count" -gt "0" ]] ; then
-            hook_com[staged]+=" ${color_green}$staged_count%{$reset_color%}"
-        fi
-        if [[ "$unstaged_count" -gt "0" ]] ; then
-            hook_com[unstaged]+=" ${color_orange}$unstaged_count%{$reset_color%}"
-        fi
-    fi
-}
 
-+vi-set-untracked(){
-    if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] ; then 
-        if [[ $(git ls-files --other --exclude-standard | wc -l) -gt "0" ]] ; then
-            hook_com[misc]="${FMT_UNTRACKED}"
-        fi
-    fi
-}
-
-zstyle ':vcs_info:git*+set-message:*' hooks set-git-items set-untracked
+zstyle ':vcs_info:git*+set-message:*' hooks acquire-git-change-info acquire-untracked-files
 zstyle ':vcs_info:*'     stagedstr     "${FMT_STAGED}"
 zstyle ':vcs_info:*'     unstagedstr   "${FMT_UNSTAGED}"
 #zstyle ':vcs_info:*'     untrackedstr  "${FMT_UNTRACKED}"
@@ -93,8 +107,8 @@ ZSH_THEME_VIRTUALENV_SUFFIX="%{$reset_color%}"
 # be aware of spacing
 
 PROMPT=""
-#PROMPT+="${usr_config}"
-#PROMPT+=" ${sep_config} " 
+PROMPT+="${usr_config}"
+PROMPT+=" ${sep_config} " 
 PROMPT+="${pwd_config}"
 PROMPT+="\$(virtualenv_prompt_info)"
 PROMPT+="\${vcs_info_msg_0_}"
