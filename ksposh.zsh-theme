@@ -20,8 +20,10 @@
 
 +vi-acquire-git-change-info() {
 	if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+
 		count_staged="$(git diff-index --cached --name-only HEAD | wc -l)"
 		count_unstaged="$(git diff-files --name-only | wc -l)"
+		count_untracked="$(git ls-files --other --exclude-standard | wc -l)" 
 
 		if [ "$count_staged" -gt 0 ]; then
 			hook_com[staged]+="${color_green}$count_staged%{$reset_color%}"
@@ -29,17 +31,12 @@
 		if [ "$count_unstaged" -gt 0 ]; then
 			hook_com[unstaged]+="${color_orange}$count_unstaged%{$reset_color%}"
 		fi
-
+        if [ "$count_untracked" -gt 0 ]; then
+            hook_com[misc]="${FMT_UNTRACKED}"
+		fi
 	fi
 }
 
-+vi-acquire-untracked-files(){
-    if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] ; then 
-        if [[ $(git ls-files --other --exclude-standard | wc -l) -gt "0" ]] ; then
-            hook_com[misc]="${FMT_UNTRACKED}"
-        fi
-    fi
-}
 ## ---
 ## Color Scheme
 ## ---
@@ -67,12 +64,12 @@ esac
 ## Markers
 ## ---
 
-usr_config="${color_purple}%n%{$reset_color%}"
-pwd_config="${color_green}%~%{$reset_color%}"
-sep_config="${color_orange}»%{$reset_color%}"
-la_config="${color_orange}<%{$reset_color%}"
-ra_config="${color_orange}>%{$reset_color%}"
-split_config="${color_orange}§%{$reset_color%}"
+indicator_user="${color_purple}%n%{$reset_color%}"
+indicator_path="${color_green}%~%{$reset_color%}"
+indicator_separator="${color_orange}»%{$reset_color%}"
+indicator_less="${color_orange}<%{$reset_color%}"
+indicator_right="${color_orange}>%{$reset_color%}"
+indicator_split="${color_orange}§%{$reset_color%}"
 
 # git configurations 
 
@@ -82,14 +79,14 @@ add-zsh-hook precmd vcs_info
 
 zstyle ':vcs_info:*' check-for-changes true
 
-FMT_BRANCH=" ${sep_config} ${color_cyan}%b%{$reset_color%}"
-FMT_ACTION=" ${ra_config}${color_blue}%a${la_config}%{$reset_color%}"
+FMT_BRANCH=" ${indicator_separator} ${color_cyan}%b%{$reset_color%}"
+FMT_ACTION=" ${indicator_right}${color_blue}%a${indicator_less}%{$reset_color%}"
 FMT_UNSTAGED=" ${color_orange}▼%{$reset_color%}"
 FMT_STAGED=" ${color_green}▲%{$reset_color%}"
 FMT_UNTRACKED=" ${color_red}?%{$reset_color%}"
 
 
-zstyle ':vcs_info:git*+set-message:*' hooks acquire-git-change-info acquire-untracked-files
+zstyle ':vcs_info:git*+set-message:*' hooks acquire-git-change-info 
 zstyle ':vcs_info:*'     stagedstr     "${FMT_STAGED}"
 zstyle ':vcs_info:*'     unstagedstr   "${FMT_UNSTAGED}"
 #zstyle ':vcs_info:*'     untrackedstr  "${FMT_UNTRACKED}"
@@ -99,7 +96,7 @@ zstyle ':vcs_info:*'     nvcsformats   ""
 
 # virtualenv configurations
 
-ZSH_THEME_VIRTUALENV_PREFIX=" ${sep_config} ${color_red}"
+ZSH_THEME_VIRTUALENV_PREFIX=" ${indicator_separator} ${color_red}"
 ZSH_THEME_VIRTUALENV_SUFFIX="%{$reset_color%}"
 
 # PROMPT 
@@ -107,11 +104,11 @@ ZSH_THEME_VIRTUALENV_SUFFIX="%{$reset_color%}"
 # be aware of spacing
 
 PROMPT=""
-PROMPT+="${usr_config}"
-PROMPT+=" ${sep_config} " 
-PROMPT+="${pwd_config}"
+PROMPT+="${indicator_user}"
+PROMPT+=" ${indicator_separator} " 
+PROMPT+="${indicator_path}"
 PROMPT+="\$(virtualenv_prompt_info)"
 PROMPT+="\${vcs_info_msg_0_}"
-PROMPT+=" ${split_config} "
+PROMPT+=" ${indicator_split} "
 PROMPT+="%{$reset_color%}"
 
