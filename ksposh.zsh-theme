@@ -23,16 +23,20 @@
 
 +vi-acquire-git-change-info() {
 	if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+		case "$(git rev-parse --show-toplevel 2>/dev/null)" in
+			*/.cache/*) ;;
+			*)
+				count_staged="$(git diff-index --cached --name-only HEAD | wc -l)"
+				count_unstaged="$(git diff-files --name-only | wc -l)"
+				count_untracked="$(git ls-files --other --exclude-standard | wc -l)"
 
-		count_staged="$(git diff-index --cached --name-only HEAD | wc -l)"
-		count_unstaged="$(git diff-files --name-only | wc -l)"
-		count_untracked="$(git ls-files --other --exclude-standard | wc -l)"
+				[ "$count_staged" -gt 0 ] && hook_com[staged]+="$count_staged"
+				[ "$count_unstaged" -gt 0 ] && hook_com[unstaged]+="$count_unstaged"
 
-		[ "$count_staged" -gt 0 ] && hook_com[staged]+="$count_staged"
-		[ "$count_unstaged" -gt 0 ] && hook_com[unstaged]+="$count_unstaged"
-
-		hook_com[misc]="" # Empty misc to not get artifacts in git action
-		[ "$count_untracked" -gt 0 ] && hook_com[misc]=" ${color_red}?$count_untracked"
+				hook_com[misc]="" # Empty misc to not get artifacts in git action
+				[ "$count_untracked" -gt 0 ] && hook_com[misc]=" ${color_red}?$count_untracked"
+				;;
+		esac
 	fi
 }
 
