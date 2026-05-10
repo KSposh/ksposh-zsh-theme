@@ -124,4 +124,3 @@ PROMPT+=" ${marker_path}"
 PROMPT+="\${vcs_info_msg_0_}"
 PROMPT+=" ${marker_split}"
 PROMPT+=" %{$reset_color%}"
-
