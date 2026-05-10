@@ -1,6 +1,6 @@
 # ksposh-zsh-theme
 
-Theme based of [half-life](https://github.com/ohmyzsh/ohmyzsh/blob/master/themes/half-life.zsh-theme) for zsh.
+Theme based of [half-life] for zsh.
 
 Links for feature inspirations are present in the script's header.
 
@@ -15,9 +15,10 @@ Prompt is easily editable, and you can comment out any feature that you don't wa
 
 Example with every feature active:
 
-![](images/ksp_zsh_theme_venv_action.png)
+![Example image](images/ksp_zsh_theme_venv_action.png)
 
 ## Installation
 
     cp ksposh.zsh-theme <YOUR>/<ZSH>/<CONFIG>/<LOCATION>
 
+[half-life]: https://github.com/ohmyzsh/ohmyzsh/blob/master/themes/half-life.zsh-theme
